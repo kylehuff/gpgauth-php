@@ -1,0 +1,36 @@
+Requirements
+=============
+    (These requirements and this PHP implementation is based Linux and Apache, but the PHP code should be basically the same)
+    Apache
+    PHP
+    PHP PECL gnupg package
+
+Installation of GnuPG
+=============
+To install the gnupg package in debian:
+
+apt-get install php5-dev php-pear libgpgme11-dev libgpgme11
+Then
+
+pecl install gnupg
+Then you must add the following to your php.ini file:
+
+extension=gnupg.so
+
+Setup of GnuPG
+=============
+You will need to create a GnuPG keystore accessible to your apache user (usually, www-data, in the directory /var/www/.gnupg for example.). This is where the public keys for your users will be stored, and if you use symmetric gpgAuth (the ability for the remote client to authenticate the server), your servers private key. If you do not want to provide symmetric gpgAuth, you can skip the key-gen part.
+
+You can create this keystore by becomming the user Apache is running under - in my case 'www-data' - and then create a key
+
+su into the root user:
+
+sudo su
+then su into the user your web sever runs under (in my case, www-data):
+
+su www-data
+Then, as the web server user, create a key with:
+
+gpg --gen-key
+
+Answer the questions, and when it asks for your Real Name, enter the domain name you will be using this key for. This will become your server key, the key that users will encrypt tokens to.
